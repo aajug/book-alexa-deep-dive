@@ -1,0 +1,19 @@
+PREDEF:
+  - chap00-preface.re
+
+CHAPS:
+  - chapxx-toru-kobayashi.re
+  - chapxx-yuka-matsuba.re
+  - chapxx-shohei-miyazaki.re
+  - chapxx-hironori-takauma.re
+  - chapxx-tsuyoshi-seino.re
+  - chapxx-masami-yamate.re
+  - chapxx-miso-tanaka.re
+  - chapxx-atsushi-umakatsu.re
+  - chapxx-hidetaka-okamoto.re
+  - chapxx-tomoharu-ito.re
+
+APPENDIX:
+
+POSTDEF:
+  - chap99-postscript.re

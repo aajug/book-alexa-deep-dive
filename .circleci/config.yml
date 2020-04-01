@@ -1,0 +1,122 @@
+version: 2.1
+
+executors:
+  review:
+    docker:
+      - image: kauplan/review2.5
+    working_directory: /build
+
+commands:
+  check-master:
+    steps:
+      - run:
+          name: check master
+          command: |
+            echo Branch: ${CIRCLE_BRANCH}
+            if [ "${CIRCLE_BRANCH}" = "master" ]; then
+              echo Skip CI!
+              circleci step halt
+            fi
+
+jobs:
+  build:
+    executor: review
+    steps:
+      - checkout
+      
+      - check-master
+      
+      - run:
+          name: make ebook
+          command: |
+            export STARTER_TARGET=ebook
+            cd /build/review-starter
+            rake pdf
+            mv book.pdf ebook.pdf
+      
+      - persist_to_workspace:
+          root: /build/review-starter
+          paths:
+            - ebook.pdf
+  
+  buildPbook:
+    executor: review
+    steps:
+      - checkout
+      
+      - check-master
+      
+      - attach_workspace:
+          at: /build/review-starter
+      
+      - run:
+          name: make pbook
+          command: |
+            export STARTER_TARGET=pbook
+            cd /build/review-starter
+            apt-get update
+            apt-get install -y imagemagick
+            chmod +x ./convert-grayscale.sh
+            ./convert-grayscale.sh
+            chmod +x ./make-pbook.sh
+            ./make-pbook.sh
+            mv book.pdf pbook.pdf
+      
+      - persist_to_workspace:
+          root: /build/review-starter
+          paths:
+            - ebook.pdf
+            - pbook.pdf
+  
+  pushBooks:
+    docker:
+      - image: buildpack-deps:trusty
+    working_directory: /build
+    steps:
+      - checkout
+      
+      - check-master
+      
+      - restore_cache:
+          keys:
+          - v1-dependencies-
+      
+      - attach_workspace:
+          at: /build/review-starter
+      
+      - run:
+          name: prepare gdrive command
+          command: |
+            mkdir -p ~/bin
+            test ! -f ~/bin/gdrive \
+            && curl -L -o ~/bin/gdrive "https://github.com/gdrive-org/gdrive/releases/download/2.1.0/gdrive-linux-x64" \
+            && chmod +x ~/bin/gdrive
+            mkdir -p ~/.gdrive
+            echo $GCLOUD_SERVICE_ACCOUNT_KEY > ~/.gdrive/service-account.json
+      
+      - run:
+          name: publish artifacts
+          command: |
+            for id in $(~/bin/gdrive --service-account service-account.json list -q "name contains '.pdf' and '$GDRIVE_DIR_ID' in parents" | awk '{print $1}' | grep -v Id); do
+              ~/bin/gdrive --service-account service-account.json delete $id
+            done
+            
+            ~/bin/gdrive --service-account service-account.json upload -p $GDRIVE_DIR_ID /build/review-starter/ebook.pdf
+            ~/bin/gdrive --service-account service-account.json upload -p $GDRIVE_DIR_ID /build/review-starter/pbook.pdf
+      
+      - save_cache:
+          paths:
+          - "~/bin"
+          key: v1-dependencies-
+
+workflows:
+  version: 2
+  build_all:
+    jobs:
+      - build
+      - buildPbook:
+          requires:
+            - build
+      - pushBooks:
+          requires:
+            - buildPbook

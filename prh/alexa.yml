@@ -1,0 +1,23 @@
+# Rules for Alexa
+version: 1
+rules:
+  - expected: Alexa
+    pattern:
+      - alexa
+      - ALEXA
+  - expected: Amazon Echo
+    pattern:
+      - amazon echo
+      - AMAZON ECHO
+  - expected: Intent
+    pattern:
+      - intent
+      - INTENT
+  - expected: Slot
+    pattern:
+      - slot
+      - SLOT
+  - expected: Lambda
+    pattern:
+      - lambda
+      - LAMBDA

@@ -1,0 +1,31 @@
+{
+  "filters": {
+    "whitelist": {
+      "allow": [
+        "‚Í‚¶‚ß‚É",
+        "‚¨‚í‚è‚É",
+        
+        "xxx"
+      ]
+    }
+  },
+  "rules": {
+    "preset-ja-technical-writing": true,
+    
+    "prh": {
+      "rulePaths": [
+        "prh/alexa.yml",
+        "prh/files/markdown.yml",
+        "prh/files/review.yml",
+        "prh/languages/ja/typo.yml",
+        "prh/media/techbooster.yml",
+        "prh/media/WEB+DB_PRESS.yml",
+        "prh/terms/review.yml",
+        "prh/terms/trademark.yml"
+      ]
+    }
+  },
+  "plugins": [
+    "review"
+  ]
+}

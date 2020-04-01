@@ -1,0 +1,27 @@
+{
+  "name": "book-of-alexa-experts",
+  "version": "1.0.0",
+  "dependencies": {
+    "chokidar-cli": "^2.1.0",
+    "power-assert": "^1.6.1",
+    "replace": "^1.1.1",
+    "textlint": "^11.4.0",
+    "textlint-filter-rule-comments": "^1.2.2",
+    "textlint-filter-rule-whitelist": "^2.0.0",
+    "textlint-plugin-review": "^0.4.0",
+    "textlint-rule-preset-ja-spacing": "^2.0.1",
+    "textlint-rule-preset-ja-technical-writing": "^3.1.3",
+    "textlint-rule-prh": "^5.2.1"
+  },
+  "scripts": {
+    "lint": "textlint",
+    "l": "lint",
+    "watch": "chokidar /md/*.md -c \"md2review [name].md review-starter/[name].re\"",
+    "w": "watch",
+    "build:win": "@build.cmd",
+    "bw": "build:win",
+    "build:mac": "",
+    "bm": "build:mac",
+    "dummy": ""
+  }
+}
