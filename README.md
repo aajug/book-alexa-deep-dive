@@ -1,3 +1,5 @@
+![Alexa Deep Dive](./title.png)  
+
 # はじめに
 本リポジトリは[技術書典8](https://techbookfest.org/event/tbf08)にて頒布を予定していたAlexa Deep DiveのRe:VIEWリポジトリです。  
 技術書典8オフラインイベント中止により執筆陣で相談した結果、OSSとして公開することとしました。  
